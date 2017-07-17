@@ -1,0 +1,23 @@
+sudo: required
+
+branches:
+  only:
+  - master
+
+env:
+  matrix:
+    VERSION: "5.6"
+    VERSION: "7.0"
+
+services:
+- docker
+
+before_script:
+- docker login -u="${QUAY_USERNAME}" -p="${QUAY_PASSWORD}" quay.io
+
+script:
+- docker build
+    -t quay.io/jetstack/php-fpm-autoreload:$VERSION
+    -f $VERSION/Dockerfile
+    .
+- docker push quay.io/jetstack/php-fpm-autoreload:$VERSION
